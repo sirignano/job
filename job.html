@@ -1,0 +1,33 @@
+<head>
+  <title>Galaxy</title>
+</head>
+
+<body>
+	{{> loginButtons}}
+
+  <h1>Welcome to hit steve party!</h1>
+{{#if currentUser}}
+ {{> gen}}
+{{/if}}
+</body>
+
+
+<template name="gen">
+	{{#if onmap}}
+  		{{> map}}
+  	{{else}}
+  		{{> zoom}}
+  	{{/if}}
+</template>
+
+<template name="map">
+	<h2>You ({{user.username}}) have {{user.timed}} seconds of life here and make {{user.walked}} click !</h2>
+	  <input type="button" class="btn zoom" value="voir le vaisseau" />
+</template>
+
+<template name="zoom">
+	<div class="vaisseau">{{ p }}%</div>
+	<input type="button" class="btn span4 btn-warning right" id="1" value="poussée droite" />
+	<input type="button" class="btn span4 btn-success left" id="2" value="poussée gauche" />
+	<input type="button" class="btn map" value="voir la carte" />
+</template>
