@@ -4,8 +4,7 @@
 
 <body>
 	{{> loginButtons}}
-
-  <h1>Welcome to hit steve party!</h1>
+<h3>yo</h3>
 {{#if currentUser}}
  {{> gen}}
 {{/if}}
@@ -26,7 +25,11 @@
 </template>
 
 <template name="zoom">
-	<div class="vaisseau">{{p}}%</div>
+	<div class="progress">
+	  <div class="progress-bar" role="progressbar" aria-valuenow="{{p}}" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+	    <span class="sr-only">{{p}}% Complete</span>
+	  </div>
+	</div>
 	<input type="button" class="btn span4 btn-warning right" id="1" value="poussée droite" />
 	<input type="button" class="btn span4 btn-success left" id="2" value="poussée gauche" />
 	<input type="button" class="btn map" value="voir la carte" />

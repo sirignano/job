@@ -50,15 +50,13 @@ Ship = new Mongo.Collection("ship");
 Meteor.methods({
 	left: function () {
 //
-	if (Meteor.user().old == "right")
-		Ship.update({_id: Ship.find({}).fetch()[0]._id}, {$inc: {'p': 1}});
-	Meteor.users.update({_id: this.userId}, {$set: {'old': "left"}});
+		if (Meteor.user().old == "right"){ Ship.update({_id: Ship.find({}).fetch()[0]._id}, {$inc: {'p': 1}}); Meteor.users.update({_id: this.userId}, {$inc: {'walked': 1}});}
+		Meteor.users.update({_id: this.userId}, {$set: {'old': "left"}});
 	},
 	right: function () {
 //
-	if (Meteor.user().old == "left")
-		Ship.update({_id: Ship.find({}).fetch()[0]._id}, {$inc: {'p': 1}});
-	Meteor.users.update({_id: this.userId}, {$set: {'old': "right"}});
+		if (Meteor.user().old == "left") { Ship.update({_id: Ship.find({}).fetch()[0]._id}, {$inc: {'p': 1}}); Meteor.users.update({_id: this.userId}, {$inc: {'walked': 1}});}
+		Meteor.users.update({_id: this.userId}, {$set: {'old': "right"}});
 	},	
 	map: function () {
 //
