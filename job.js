@@ -7,7 +7,7 @@ if (Meteor.isClient) {
 	Template.zoom.events({ 'click input.map': function (event) {  Meteor.call('map'); } });
 	Template.zoom.events({ 'click input.left': function (event) {  Meteor.call('left'); } });
 	Template.zoom.events({ 'click input.right': function (event) {  Meteor.call('right'); } });
-	Template.zoom.p = function () { return Ship.find({}).fetch()[0].p; }
+	Template.zoom.p = function () { return Ship.find({}).fetch()[0].p % 100; }
 	Template.map.events({ 'click input.zoom': function (event) {  Meteor.call('zoom'); } });
 	Template.gen.onmap = function () { return Meteor.user().onmap; }
  //code client
@@ -31,6 +31,7 @@ if (Meteor.isServer) {
 					user.walked = 0;
 					user.timed = 0;
 					user.onmap = true;
+					user.old = "right";
 					return user;
 	})
 	Meteor.publish("ship", function () {
@@ -49,11 +50,15 @@ Ship = new Mongo.Collection("ship");
 Meteor.methods({
 	left: function () {
 //
+	if (Meteor.user().old == "right")
 		Ship.update({_id: Ship.find({}).fetch()[0]._id}, {$inc: {'p': 1}});
+	Meteor.users.update({_id: this.userId}, {$set: {'old': "left"}});
 	},
 	right: function () {
 //
+	if (Meteor.user().old == "left")
 		Ship.update({_id: Ship.find({}).fetch()[0]._id}, {$inc: {'p': 1}});
+	Meteor.users.update({_id: this.userId}, {$set: {'old': "right"}});
 	},	
 	map: function () {
 //
