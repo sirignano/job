@@ -1,0 +1,18 @@
+/*
+** COPIER COLLER CETTE FONCTION DE SEEDING DANS is_serveur? .
+*/
+  	if (Meteor.users.find().count() === 0)
+  	{
+
+  		i = 0;
+  		while (i < 10000)
+  		{
+			  seed1UserId = Accounts.createUser({ 
+			    username: 'lance' + i.toString(), 
+			    email: 'l@oo.com' + i.toString(), 
+			    password: '123456' + i.toString() 
+			  }); 
+			i++;
+
+		} 
+	}

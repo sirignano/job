@@ -1,69 +1,45 @@
-if (Meteor.isClient) {
+Ship = new Mongo.Collection("ship");
+
+if (Meteor.isClient)
+{
 	Meteor.subscribe('userData');
 	Meteor.subscribe('ship');
-	Accounts.ui.config({    passwordSignupFields: 'USERNAME_ONLY' });
+	Accounts.ui.config({ passwordSignupFields: 'USERNAME_ONLY' });
 
-	Template.map.user = function () { return Meteor.user(); }
-	Template.zoom.events({ 'click input.map': function (event) {  Meteor.call('map'); } });
-	Template.zoom.events({ 'click input.left': function (event) {  Meteor.call('left'); } });
-	Template.zoom.events({ 'click input.right': function (event) {  Meteor.call('right'); } });
-	Template.zoom.p = function () { return Ship.find({}).fetch()[0].p % 100; }
-	Template.map.events({ 'click input.zoom': function (event) {  Meteor.call('zoom'); } });
-	Template.gen.onmap = function () { return Meteor.user().onmap; }
- //code client
+	Template.zoom.events({ 'click input.left': function (event) { Session.set('alert', 'left'); if (Session.get('old') == "right") { Meteor.call('left'); } Session.set('old', 'left');} });
+	Template.zoom.events({ 'click input.right': function (event) { Session.set('alert', 'right'); if (Session.get('old') == "left") { Meteor.call('right'); } Session.set('old', 'right');} });
+	Template.zoom.events({ 'click input.map': function (event) {  Session.set('onmap', true); } });
+	Template.map.events({ 'click input.zoom': function (event) {  Session.set('onmap', false); } });
+
+	Template.gen.helpers({ onmap: function () { return Session.get('onmap'); } });
+	Template.gen.helpers({ alert: function () { return Session.get('alert'); } });
+	Template.gen.helpers({ notice: function () { return Session.get('notice'); } });
+	Template.map.helpers({ user: function () { return Meteor.user(); } });
+	Template.zoom.helpers({ p: function () { a = Ship.find().fetch()[0]; if (!a) return (0); return (a.p % 100); } });
 }
 
-if (Meteor.isServer) {
-  Meteor.startup(function () {
-
-	if (Ship.find().count() === 0)
-	{
-		Ship.insert({
-			p: 0
-		});
-	}
-
-	Meteor.publish("userData", function () {
-		return Meteor.users.find({}, {sort: {'money': -1}});
-	});
-
-	Accounts.onCreateUser(function(options, user) {
-					user.walked = 0;
-					user.timed = 0;
-					user.onmap = true;
-					user.old = "right";
-					return user;
-	})
-	Meteor.publish("ship", function () {
-		return Ship.find();
-	});
-    // code to run on server at startup
-  });
+if (Meteor.isServer)
+{
+  Meteor.startup(function () {	if (Ship.find().count() === 0)	{ Ship.insert({ p: 0 }); }
+  Accounts.onCreateUser(function(options, user) { user.walked = 0; return user; }) });
+  Meteor.publish("userData", function () { return Meteor.users.find(); });
+  Meteor.publish("ship", function () { return Ship.find(); });
 }
 
 //bdd
 
 //avancée
-Ship = new Mongo.Collection("ship");
-
 
 Meteor.methods({
-	left: function () {
-//
-		if (Meteor.user().old == "right"){ Ship.update({_id: Ship.find({}).fetch()[0]._id}, {$inc: {'p': 1}}); Meteor.users.update({_id: this.userId}, {$inc: {'walked': 1}});}
-		Meteor.users.update({_id: this.userId}, {$set: {'old': "left"}});
+	left: function ()
+	{
+		Ship.update({_id: Ship.find().fetch()[0]._id}, {$inc: {'p': 1}});
+		Meteor.users.update({_id: this.userId}, {$inc: {'walked': 1}});
+
 	},
-	right: function () {
-//
-		if (Meteor.user().old == "left") { Ship.update({_id: Ship.find({}).fetch()[0]._id}, {$inc: {'p': 1}}); Meteor.users.update({_id: this.userId}, {$inc: {'walked': 1}});}
-		Meteor.users.update({_id: this.userId}, {$set: {'old': "right"}});
-	},	
-	map: function () {
-//
-		Meteor.users.update({_id: this.userId}, {$set: {'onmap': true}});
-	},
-	zoom: function () {
-//
-		Meteor.users.update({_id: this.userId}, {$set: {'onmap': false}});
+	right: function ()
+	{
+		Ship.update({_id: Ship.find().fetch()[0]._id}, {$inc: {'p': 1}});
+		Meteor.users.update({_id: this.userId}, {$inc: {'walked': 1}});
 	},
 })

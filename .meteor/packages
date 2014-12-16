@@ -4,6 +4,7 @@
 # but you can also edit it by hand.
 
 meteor-platform
-bootstrap
 accounts-password
 accounts-ui
+mizzao:bootstrap-3
+
