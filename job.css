@@ -1,1 +1,22 @@
 /* CSS declarations go here */
+.red {
+	background-image: url("bar.png");
+}
+
+.progress
+{
+	height: 12px;
+}
+
+.block {
+	height: 500px;
+	margin-left: 5%;
+	margin-right: 5%;
+}
+
+.im {
+	/*position:relative;
+	top:-47px;*/
+	position: absolute;
+	top: 29px;
+}

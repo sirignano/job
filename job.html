@@ -12,12 +12,6 @@
 
 
 <template name="gen">
-	{{#if alert}}
-	  <div class="alert alert-danger" role="alert">{{alert}}</div>
-	{{/if}}
-	{{#if notice}}
-	 <div class="alert alert-success" role="alert">{{notice}}</div>
-	{{/if}}
 	{{#if onmap}}
   		{{> map}}
   	{{else}}
@@ -26,25 +20,63 @@
 </template>
 
 <template name="map">
-	<h2>You ({{user.username}}) have {{user.timed}} seconds of life here and make {{user.walked}} click !</h2>
-	  <input type="button" class="btn zoom" value="voir le vaisseau" />
+		{{#if p}}
+							<div class="progress">
+						  <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="99" aria-valuemin="0" aria-valuemax="100" style="width: 99%">
+						    <span class="sr-only">barre de chargement</span>
+						  </div>
+						</div>
+				{{else}}
+										{{#each maps}}
+											{{> megamap}}
+										{{/each}}
+					<h2>You ({{user.username}}) have {{user.timed}} seconds of life here and make {{user.walked}} click !</h2>
+					  <input type="button" class="btn zoom" value="voir le vaisseau" />
+		{{/if}}
 </template>
-
+<template name="megamap">
+	<div>
+		{{name}}
+	</div>
+</template>
 <template name="zoom">
 	{{#if p}}
-		<div class="progress">
-		  <div class="progress-bar" role="progressbar" aria-valuenow="{{p}}" aria-valuemin="0" aria-valuemax="100" style="width: {{p}}%;">
-		    <span class="sr-only">{{p}}% Complete</span>
-		  </div>
+<div class="block">
+					<div class="progress">
+					  <div class="progress-bar active red" role="progressbar" aria-valuenow="{{p}}" aria-valuemin="0" aria-valuemax="100" style="width: {{p}}%;">
+							<span class="sr-only">{{p}}% Complete</span><img class="im" src="/ship.png" style="left:{{pl}}%;"/>
+					  </div>
+					</div>
 		</div>
-	{{else}}
-				<div class="progress">
-			  <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="99" aria-valuemin="0" aria-valuemax="100" style="width: 99%">
-			    <span class="sr-only">barre de chargement</span>
-			  </div>
-			</div>
+
+
+			<input type="button" class="btn span4 btn-warning right" id="1" value="poussée droite" />
+			<input type="button" class="btn span4 btn-success left" id="2" value="poussée gauche" />
+			<input type="button" class="btn map" value="voir la carte" />
+			{{#if map}}
+			<div> la carte s'apelle {{map}}</div>
+			{{else}}
+			<div> loading...</div>
+			{{/if}}
+				{{#if alert}}
+			  <div class="alert alert-danger" role="alert">{{alert}}</div>
+			{{/if}}
+			{{#if notice}}
+			 <div class="alert alert-success" role="alert">{{notice}}</div>
+			{{/if}}
+			<input type="button" class="btn span4 btn-success hhh" id="42" value="cheat" />
+
+			<input type="button" class="btn span4 btn-success reset" id="42" value="reset p" />
+				{{else}}
+
+							<div class="progress">
+						  <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="99" aria-valuemin="0" aria-valuemax="100" style="width: 99%">
+						    <span class="sr-only">barre de chargement</span>
+						  </div>
+						</div>
+	
+
+
+
 	{{/if}}
-	<input type="button" class="btn span4 btn-warning right" id="1" value="poussée droite" />
-	<input type="button" class="btn span4 btn-success left" id="2" value="poussée gauche" />
-	<input type="button" class="btn map" value="voir la carte" />
 </template>
