@@ -35,6 +35,8 @@ if (Meteor.isClient)
 	Template.zoom.helpers({ p: function () { a = Ship.find().fetch()[0]; if (!a) return (0); return ((a.p % 100) + 0.000001); } });
 	Template.zoom.helpers({ pl: function () { a = Ship.find().fetch()[0]; if (!a) return (0); if (a.p <= 10) return(10); return ((a.p % 100) - 5); } });
 	Template.zoom.helpers({ item: function () { a = Ship.find().fetch()[0]; if (!a) return (ret); item = Item.find({ $and: [ { pos: { $gt: a.p } }, { pos: { $lt: ((Math.floor(a.p / 100) + 1 ) * 100) } } ] }).fetch(); i = 0;	while (item[i])	{ item[i].pos = item[i].pos % 100; i++; } console.log(item); return item; } });
+	Template.zoom.helpers({ equip: function () { return Item.find({ $and: [ { equip: 1 }, { pos: { $exists: true } } ] }).fetch() } });
+	Template.zoom.helpers({ evenement: function () { return Item.find({ $and: [ { equip: 1 }, { pos: { $exists: false } } ] }).fetch() } });
 
 	Template.zoom.events({ 'click input.reset': function (event) {   Meteor.call('reset'); } });
 }
@@ -50,8 +52,10 @@ if (Meteor.isServer)
   if (Item.find().count() === 0) { 
   	date = new Date();
   	Item.insert({name: "coca", time: 5, mult: 1, add: 3, pos: 6, equip: 0});
-  	Item.insert({name: "propulseur", mult: 2, add: 0, pos: 110, equip: 0});
-  	Item.insert({name: "vent favorable", time_start: (date.getTime() + (1 * 1000 * 60)), time_end: (date.getTime() + (2 * 1000 * 60)), mult: 5, add: 0, equip: 0});
+  	Item.insert({name: "pepsi", time: 10, mult: 1, add: 5, pos: 85, equip: 0});
+  	Item.insert({name: "propulseur", mult: 3, add: 0, pos: 210, equip: 0});
+  	Item.insert({name: "propulseur2", mult: 5, add: 0, pos: 1015, equip: 0});
+  	Item.insert({name: "vent favorable", time_start: (date.getTime() + (2 * 1000 * 60)), time_end: (date.getTime() + (3 * 1000 * 60)), mult: 5, add: 0, equip: 0});
    }
   Accounts.onCreateUser(function(options, user) { user.walked = 0; return user; }) });
   Meteor.publish("userData", function () { return Meteor.users.find(); });

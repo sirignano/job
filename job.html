@@ -69,6 +69,18 @@
 			<input type="button" class="btn span4 btn-success hhh" id="42" value="cheat" />
 
 			<input type="button" class="btn span4 btn-success reset" id="42" value="reset p" />
+
+			<div>
+				{{#each equip}}
+					Vous avez un <img  src="/{{name}}.png"/><br/>
+				{{/each}}
+			</div>
+			<div>
+				{{#each evenement}}
+					Il y a un {{name}}<br/>
+				{{/each}}
+			</div>
+
 				{{else}}
 
 							<div class="progress">
