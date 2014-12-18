@@ -44,7 +44,9 @@
 <div class="block">
 					<div class="progress">
 					  <div class="progress-bar active red" role="progressbar" aria-valuenow="{{p}}" aria-valuemin="0" aria-valuemax="100" style="width: {{p}}%;">
-							<span class="sr-only">{{p}}% Complete</span><img class="im" src="/ship.png" style="left:{{pl}}%;"/>
+							<span class="sr-only">{{p}}% Complete</span><img class="im" src="/ship.png" style="left:{{pl}}%;"/>{{#each item}}
+								<img class="im" src="/{{name}}.png" style="left:{{pos}}%;"/>
+							{{/each}}
 					  </div>
 					</div>
 		</div>
